@@ -29,12 +29,7 @@ export function getInfo() {
     };
 }
 
-export function getTranslatedMessage(postProp) {
-    let postId;
-    if (postProp.id) {
-        postId = postProp.id;
-    }
-
+export function getTranslatedMessage(postId) {
     return async (dispatch, getState) => {
         const state = getState();
 
@@ -84,11 +79,11 @@ export function getTranslatedMessage(postProp) {
         try {
             data = await Client.getGo(postId, source, target);
         } catch (error) {
-            const status = error.response && error.response.statusText ? error.response.statusText : '';
-            const text = error.response && error.response.text ? error.response.text.replace(/[\n\t\r]/g, '') : '';
+            const errorText = error.response && error.response.text ? error.response.text.split('\n')[0] : '';
+            const text = errorText.replace(/[\n\t\r]/g, ' ');
             dispatch({
                 type: PostTypes.RECEIVED_POST,
-                data: {...post, translation: {error: {status, text}, show: true, post_id: postId}},
+                data: {...post, translation: {errorMessage: text, show: true, post_id: postId}},
             }, getState);
 
             return {error};

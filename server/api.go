@@ -95,7 +95,7 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 
 	output, awsErr := svc.Text(&input)
 	if awsErr != nil {
-		http.Error(w, "Failed to translate", http.StatusInternalServerError)
+		http.Error(w, awsErr.Error(), http.StatusInternalServerError)
 		return
 	}
 

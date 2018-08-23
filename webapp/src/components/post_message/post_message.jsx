@@ -6,7 +6,7 @@ export default class PostMessage extends React.PureComponent {
         activated: PropTypes.bool.isRequired,
         translation: PropTypes.object.isRequired,
         hide: PropTypes.func,
-        onTextChange: PropTypes.func,
+        onHeightChange: PropTypes.func,
     }
 
     static defaultProps = {
@@ -16,12 +16,13 @@ export default class PostMessage extends React.PureComponent {
 
     componentDidUpdate(prevProps) {
         if (this.props.translation.translated_text !== prevProps.translation.translated_text) {
-            this.props.onTextChange();
+            this.props.onHeightChange(1);
         }
     }
 
     handleOnClick = () => {
         this.props.hide(this.props.translation.post_id);
+        this.props.onHeightChange(1);
     }
 
     renderMessage(message) {
@@ -30,12 +31,7 @@ export default class PostMessage extends React.PureComponent {
                 <p>
                     <i className='icon fa fa-language'/>
                     {message}
-                    <span
-                        onClick={this.handleOnClick}
-                        style={{cursor: 'pointer'}}
-                    >
-                        <i className='icon fa fa-chevron-circle-left'/>
-                    </span>
+                    <a onClick={this.handleOnClick}>{'(close)'}</a>
                 </p>
             </React.Fragment>
         );
@@ -48,9 +44,9 @@ export default class PostMessage extends React.PureComponent {
             return null;
         }
 
-        if (translation.error) {
+        if (translation.errorMessage) {
             return this.renderMessage(
-                <span style={{color: 'red'}}>{`  ${translation.error.status}: ${translation.error.text}  `}</span>
+                <span style={{color: 'red'}}>{`  ${translation.errorMessage}  `}</span>
             );
         }
 

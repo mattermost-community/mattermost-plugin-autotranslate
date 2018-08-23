@@ -1,9 +1,11 @@
 import React from 'react';
 
-import PluginId from './plugin_id';
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
 
 import PostMessage from './components/post_message';
 import TranslateMenuItem from './components/translate_menu_item';
+
+import PluginId from './plugin_id';
 
 import {
     postDropdownMenuAction,
@@ -17,8 +19,11 @@ export default class AWSTranslatePlugin {
         registry.registerPostMessageComponent(PostMessage);
         registry.registerPostDropdownMenuAction(
             <TranslateMenuItem/>,
-            (post) => store.dispatch(postDropdownMenuAction(post)),
-            (post) => post && post.type === '',
+            (postId) => store.dispatch(postDropdownMenuAction(postId)),
+            (postId) => {
+                const post = getPost(store.getState(), postId);
+                return post && post.type === '';
+            },
         );
 
         registry.registerWebSocketEventHandler(
