@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class PostMessage extends React.PureComponent {
+export default class PostMessageAttachment extends React.PureComponent {
     static propTypes = {
         activated: PropTypes.bool.isRequired,
         translation: PropTypes.object.isRequired,

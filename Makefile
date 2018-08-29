@@ -50,37 +50,37 @@ dist: webapp/.npminstall plugin.json
 
 	# Build and copy files from webapp
 	cd webapp && npm run build
-	mkdir -p dist/translate/webapp
-	cp webapp/dist/* dist/translate/webapp/
+	mkdir -p dist/autotranslate/webapp
+	cp webapp/dist/* dist/autotranslate/webapp/
 
 	# Build files from server
 	cd server && go get github.com/mitchellh/gox
 	$(shell go env GOPATH)/bin/gox -osarch='darwin/amd64 linux/amd64 windows/amd64' -output 'dist/intermediate/plugin_{{.OS}}_{{.Arch}}' ./server
 
 	# Copy plugin files
-	cp plugin.json dist/translate/
+	cp plugin.json dist/autotranslate/
 
 	# Copy server executables & compress plugin
-	mkdir -p dist/translate/server
-	mv dist/intermediate/plugin_darwin_amd64 dist/translate/server/plugin.exe
-	cd dist && tar -zcvf mattermost-translate-plugin-darwin-amd64.tar.gz translate/*
-	mv dist/intermediate/plugin_linux_amd64 dist/translate/server/plugin.exe
-	cd dist && tar -zcvf mattermost-translate-plugin-linux-amd64.tar.gz translate/*
-	mv dist/intermediate/plugin_windows_amd64.exe dist/translate/server/plugin.exe
-	cd dist && tar -zcvf mattermost-translate-plugin-windows-amd64.tar.gz translate/*
+	mkdir -p dist/autotranslate/server
+	mv dist/intermediate/plugin_darwin_amd64 dist/autotranslate/server/plugin.exe
+	cd dist && tar -zcvf mattermost-plugin-autotranslate-darwin-amd64.tar.gz autotranslate/*
+	mv dist/intermediate/plugin_linux_amd64 dist/autotranslate/server/plugin.exe
+	cd dist && tar -zcvf mattermost-plugin-autotranslate-linux-amd64.tar.gz autotranslate/*
+	mv dist/intermediate/plugin_windows_amd64.exe dist/autotranslate/server/plugin.exe
+	cd dist && tar -zcvf mattermost-plugin-autotranslate-windows-amd64.tar.gz autotranslate/*
 
 	# Clean up temp files
-	rm -rf dist/translate
+	rm -rf dist/autotranslate
 	rm -rf dist/intermediate
 
-	@echo MacOS X plugin built at: dist/mattermost-translate-plugin-darwin-amd64.tar.gz
-	@echo Linux plugin built at: dist/mattermost-translate-plugin-linux-amd64.tar.gz
-	@echo Windows plugin built at: dist/mattermost-translate-plugin-windows-amd64.tar.gz
+	@echo MacOS X plugin built at: dist/mattermost-plugin-autotranslate-darwin-amd64.tar.gz
+	@echo Linux plugin built at: dist/mattermost-plugin-autotranslate-linux-amd64.tar.gz
+	@echo Windows plugin built at: dist/mattermost-plugin-autotranslate-windows-amd64.tar.gz
 
 localdeploy: dist
-	cp dist/mattermost-translate-plugin-$(GOOS)-$(GOARCH).tar.gz ../mattermost-server/plugins/
-	rm -rf ../mattermost-server/plugins/translate
-	tar -C ../mattermost-server/plugins/ -zxvf ../mattermost-server/plugins/mattermost-translate-plugin-$(GOOS)-$(GOARCH).tar.gz
+	cp dist/mattermost-plugin-autotranslate-$(GOOS)-$(GOARCH).tar.gz ../mattermost-server/plugins/
+	rm -rf ../mattermost-server/plugins/autotranslate
+	tar -C ../mattermost-server/plugins/ -zxvf ../mattermost-server/plugins/mattermost-plugin-autotranslate-$(GOOS)-$(GOARCH).tar.gz
 
 run: .npminstall
 	@echo Not yet implemented

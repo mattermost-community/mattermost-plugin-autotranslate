@@ -1,7 +1,7 @@
 {
-    "id": "translate",
-    "name": "Mattermost Translate",
-    "description": "Translate plugin for Mattermost > 5.2.",
+    "id": "autotranslate",
+    "name": "Autotranslate",
+    "description": "Autotranslate plugin for Mattermost 5.3 and above.",
     "version": "0.1.0",
     "backend": {
         "executable": "server/plugin.exe"

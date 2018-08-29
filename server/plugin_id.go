@@ -1,3 +1,3 @@
 package main
 
-const PluginId = "translate"
+const PluginId = "autotranslate"

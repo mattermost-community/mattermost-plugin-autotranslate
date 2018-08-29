@@ -1,1 +1,1 @@
-export default 'translate';
+export default 'autotranslate';

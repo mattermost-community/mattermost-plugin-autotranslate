@@ -1,15 +1,15 @@
-## Mattermost Translation Plugin (beta)
-A translation plugin for Mattermost.
+## Mattermost Autotranslation Plugin (beta)
+Autotranslation plugin for Mattermost.
 
-Message translation is powered by Amazon Translate which supports translation between English and any of the following languages: Arabic, Chinese (Simplified), Chinese (Traditional), Czech, French, German, Italian, Japanese, Portuguese, Russian, Spanish, and Turkish.
+Message autotranslation is powered by Amazon Translate which supports translation between English and any of the following languages: Arabic, Chinese (Simplified), Chinese (Traditional), Czech, French, German, Italian, Japanese, Portuguese, Russian, Spanish, and Turkish.
 
 ### Feature
 * __Translate__ option available at dropdown menu of each regular post.
-* __Slash commands__ to change user settings using `/translate` slash command
-    * __Check user info__ by issuing `/translate info` to see current user setting
-    * __Turn on/off__ translation by issuing `/translate [on|off]`
-    * __Change source language__ translation by issuing `/translate source [language code]` (see language codes below)
-    * __Change target language__ translation by issuing `/translate target [language code]` (see language codes below)
+* __Slash commands__ to change user settings using `/autotranslate` slash command
+    * __Check user info__ by issuing `/autotranslate info` to see current user setting
+    * __Turn on/off__ translation by issuing `/autotranslate [on|off]`
+    * __Change source language__ translation by initiating `/autotranslate source [language code]` (see language codes below)
+    * __Change target language__ translation by initiating `/autotranslate target [language code]` (see language codes below)
 * __Supported Languages and its codes__
     * __auto__ : Automatic language detection
     * __ar__ : Arabic
@@ -35,12 +35,12 @@ __Requires Mattermost 5.3 or higher__
     2. In Mattermost, go to the System Console -> Plugins -> Management
     3. Upload the plugin
 2. Spin up Amazon Translate https://aws.amazon.com/translate/
-3. In Mattermost, go to System Console -> Plugins -> Mattermost Translate
+3. In Mattermost, go to System Console -> Plugins -> Autotranslate
         * Fill in the AWS Access Key ID, Secret Access Key and Region
 4. Enable the plugin
-    * Go to System Console -> Plugins -> Management and click "Enable" underneath the Mattermost Translate plugin
+    * Go to System Console -> Plugins -> Management and click "Enable" underneath the Autotranslate plugin
 6. Test it out
-    * In Mattermost, run the slash command `/translate on` and see if `Translate` option becomes available at dropdown menu of a post.
+    * In Mattermost, run the slash command `/autotranslate on` and see if `Translate` option becomes available at dropdown menu of a post.
 
 ## Developing 
 

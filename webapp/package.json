@@ -1,7 +1,7 @@
 {
-  "name": "translate",
-  "version": "0.0.1",
-  "description": "This is translation plugin for Mattermost.",
+  "name": "autotranslate",
+  "version": "0.1.0",
+  "description": "This is autotranslation plugin for Mattermost.",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --mode=production",
