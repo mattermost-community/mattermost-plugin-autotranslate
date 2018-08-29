@@ -22,7 +22,7 @@ export default class AWSTranslatePlugin {
         // Immediately fetch the current plugin status.
         store.dispatch(getInfo());
 
-        registry.registerPostMessageComponentAttachment(PostMessageAttachment);
+        registry.registerPostMessageAttachmentComponent(PostMessageAttachment);
         registry.registerPostDropdownMenuAction(
             <TranslateMenuItem/>,
             (postId) => store.dispatch(postDropdownMenuAction(postId)),
