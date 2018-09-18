@@ -27,7 +27,7 @@ Message autotranslation is powered by Amazon Translate which supports translatio
 
 ### Installation
 
-__Requires Mattermost 5.3 or higher__
+__Requires Mattermost 5.4 or higher__
 (Currently not compatible with Mattermost as there's minor change requested to plugin system.)
 
 1. Install the plugin

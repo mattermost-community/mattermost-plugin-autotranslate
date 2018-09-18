@@ -509,6 +509,7 @@
     "github.com/aws/aws-sdk-go/aws/credentials",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/translate",
+    "github.com/mattermost/mattermost-server/model",
     "github.com/mattermost/mattermost-server/plugin",
   ]
   solver-name = "gps-cdcl"
