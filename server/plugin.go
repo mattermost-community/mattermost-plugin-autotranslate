@@ -123,7 +123,7 @@ func (p *Plugin) getUserInfo(userID string) (*UserInfo, *APIErrorResponse) {
 	if infoBytes, err := p.API.KVGet(userID); err != nil || infoBytes == nil {
 		return nil, &APIErrorResponse{ID: API_ERROR_NO_RECORD_FOUND, Message: "No record found.", StatusCode: http.StatusBadRequest}
 	} else if err := json.Unmarshal(infoBytes, &userInfo); err != nil {
-		return nil, &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to unmarshal json.", StatusCode: http.StatusInternalServerError}
+		return nil, &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to unmarshal json.", StatusCode: http.StatusBadRequest}
 	}
 
 	return &userInfo, nil
@@ -136,11 +136,11 @@ func (p *Plugin) setUserInfo(userInfo *UserInfo) *APIErrorResponse {
 
 	jsonUserInfo, err := json.Marshal(userInfo)
 	if err != nil {
-		return &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to marshal json.", StatusCode: http.StatusInternalServerError}
+		return &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to marshal json.", StatusCode: http.StatusBadRequest}
 	}
 
 	if err := p.API.KVSet(userInfo.UserID, jsonUserInfo); err != nil {
-		return &APIErrorResponse{ID: "unable_to_save", Message: "Unable to save user info.", StatusCode: http.StatusInternalServerError}
+		return &APIErrorResponse{ID: "unable_to_save", Message: "Unable to save user info.", StatusCode: http.StatusBadRequest}
 	}
 
 	p.emitUserInfoChange(userInfo)

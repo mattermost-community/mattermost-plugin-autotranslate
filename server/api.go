@@ -49,7 +49,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		http.Error(w, "Not authorized to translate post", http.StatusUnauthorized)
 		return
 	}
 
@@ -67,7 +67,7 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 
 	target := r.URL.Query().Get("target")
 	if len(target) != 2 {
-		http.Error(w, "Invalid parameter: source", http.StatusBadRequest)
+		http.Error(w, "Invalid parameter: target", http.StatusBadRequest)
 		return
 	}
 
@@ -95,7 +95,7 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 
 	output, awsErr := svc.Text(&input)
 	if awsErr != nil {
-		http.Error(w, awsErr.Error(), http.StatusInternalServerError)
+		http.Error(w, awsErr.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -116,13 +116,13 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 func (p *Plugin) getInfo(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		// silently return as user is probably not logged in
 		return
 	}
 
 	info, err := p.getUserInfo(userID)
 	if err != nil {
-		http.Error(w, "Failed to get info", http.StatusInternalServerError)
+		// silently return as user may not have activated the autotranslation
 		return
 	}
 
@@ -133,7 +133,7 @@ func (p *Plugin) getInfo(w http.ResponseWriter, r *http.Request) {
 func (p *Plugin) setInfo(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		http.Error(w, "Not authorized to set info", http.StatusUnauthorized)
 		return
 	}
 
@@ -156,7 +156,7 @@ func (p *Plugin) setInfo(w http.ResponseWriter, r *http.Request) {
 
 	err := p.setUserInfo(info)
 	if err != nil {
-		http.Error(w, "Failed to set info", http.StatusInternalServerError)
+		http.Error(w, "Failed to set info", http.StatusBadRequest)
 		return
 	}
 
