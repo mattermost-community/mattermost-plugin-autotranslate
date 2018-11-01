@@ -2,12 +2,16 @@
     "id": "autotranslate",
     "name": "Autotranslate",
     "description": "Autotranslate plugin for Mattermost 5.4 and later.",
-    "version": "0.1.0",
-    "backend": {
-        "executable": "server/plugin.exe"
+    "version": "0.1.1",
+    "server": {
+        "executables": {
+            "linux-amd64": "server/dist/plugin-linux-amd64",
+            "darwin-amd64": "server/dist/plugin-darwin-amd64",
+            "windows-amd64": "server/dist/plugin-windows-amd64.exe"
+        }
     },
     "webapp": {
-        "bundle_path": "webapp/main.js"
+        "bundle_path": "webapp/dist/main.js"
     },
     "settings_schema": {
         "settings": [

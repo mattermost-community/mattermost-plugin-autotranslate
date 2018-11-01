@@ -16,6 +16,7 @@ import reducer from './reducer';
 import {getUserInfo} from './selectors';
 
 export default class AWSTranslatePlugin {
+    // eslint-disable-next-line no-unused-vars
     initialize(registry, store) {
         registry.registerReducer(reducer);
 
