@@ -14,11 +14,12 @@ const userInfo = (state = {}, action) => {
 
 const translatedPosts = (state = {}, action) => {
     switch (action.type) {
-    case TRANSLATE_POST_SUCCESS:
+    case TRANSLATE_POST_SUCCESS: {
         const nextState = {};
         nextState[action.data.id] = action.data;
 
         return {...state, ...nextState};
+    }
     default:
         return state;
     }
