@@ -1,4 +1,5 @@
-## Mattermost Autotranslation Plugin (beta)
+## Mattermost Autotranslation Plugin (beta) [![Build Status](https://travis-ci.org/mattermost/mattermost-plugin-autotranslate.svg?branch=master)](https://travis-ci.org/mattermost/mattermost-plugin-autotranslate)
+
 Autotranslation plugin for Mattermost.
 
 Message autotranslation is powered by Amazon Translate which supports translation between English and any of the following languages: Arabic, Chinese (Simplified), Chinese (Traditional), Czech, French, German, Italian, Japanese, Portuguese, Russian, Spanish, and Turkish.
