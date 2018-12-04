@@ -5,5 +5,5 @@ var manifest = struct {
 	Version string
 }{
 	Id:      "autotranslate",
-	Version: "0.1.1",
+	Version: "0.1.2",
 }
