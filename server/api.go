@@ -27,7 +27,6 @@ func writeAPIError(w http.ResponseWriter, err *APIErrorResponse) {
 }
 
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-	fmt.Print("ServeHTTP")
 	if err := p.IsValid(); err != nil {
 		http.Error(w, "This plugin is not configured.", http.StatusNotImplemented)
 	}
