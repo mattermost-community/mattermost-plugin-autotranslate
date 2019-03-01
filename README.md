@@ -1,4 +1,4 @@
-## Mattermost Autotranslation Plugin (beta) [![Build Status](https://travis-ci.org/mattermost/mattermost-plugin-autotranslate.svg?branch=master)](https://travis-ci.org/mattermost/mattermost-plugin-autotranslate)
+## Mattermost Autotranslation Plugin (beta) [![CircleCI](https://circleci.com/gh/mattermost/mattermost-plugin-autotranslate.svg?style=svg)](https://circleci.com/gh/mattermost/mattermost-plugin-autotranslate)
 
 Autotranslation plugin for Mattermost.
 
