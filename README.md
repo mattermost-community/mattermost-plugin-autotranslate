@@ -29,7 +29,6 @@ Message autotranslation is powered by Amazon Translate which supports translatio
 ### Installation
 
 __Requires Mattermost 5.4 or higher__
-(Currently not compatible with Mattermost as there's minor change requested to plugin system.)
 
 1. Install the plugin
     1. Download the latest version of the plugin from the GitHub releases page
@@ -40,7 +39,7 @@ __Requires Mattermost 5.4 or higher__
         * Fill in the AWS Access Key ID, Secret Access Key and Region
 4. Enable the plugin
     * Go to System Console -> Plugins -> Management and click "Enable" underneath the Autotranslate plugin
-6. Test it out
+5. Test it out
     * In Mattermost, run the slash command `/autotranslate on` and see if `Translate` option becomes available at dropdown menu of a post.
 
 ## Developing 
