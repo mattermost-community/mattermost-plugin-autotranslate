@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class PostMessageAttachment extends React.PureComponent {
+export default class TranslatedMessage extends React.PureComponent {
     static propTypes = {
         activated: PropTypes.bool.isRequired,
-        translation: PropTypes.object.isRequired,
+        translation: PropTypes.object,
         hide: PropTypes.func,
         onHeightChange: PropTypes.func,
     }
 
     static defaultProps = {
         activated: false,
-        translation: {},
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.translation.translated_text !== prevProps.translation.translated_text) {
+        if (this.props.translation &&
+            prevProps.translation &&
+            this.props.translation.translated_text !== prevProps.translation.translated_text
+        ) {
             this.props.onHeightChange(1);
         }
     }
@@ -40,7 +42,7 @@ export default class PostMessageAttachment extends React.PureComponent {
     render() {
         const {translation, activated} = this.props;
 
-        if (!activated || !translation.show) {
+        if (!activated || !translation || !translation.show) {
             return null;
         }
 
