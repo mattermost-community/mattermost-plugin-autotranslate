@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const TranslateMenuItem = ({activated}) => {
+const MenuItem = ({activated}) => {
     if (!activated) {
         return null;
     }
@@ -8,8 +8,8 @@ const TranslateMenuItem = ({activated}) => {
     return 'Translate';
 };
 
-TranslateMenuItem.propTypes = {
+MenuItem.propTypes = {
     activated: PropTypes.bool,
 };
 
-export default TranslateMenuItem;
+export default MenuItem;

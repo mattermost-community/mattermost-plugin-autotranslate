@@ -6,14 +6,16 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getUserInfo} from 'selectors';
 import {hideTranslatedMessage} from 'actions';
 
-import PostMessageAttachment from './post_message_attachment';
+import TranslatedMessage from './translated_message';
 
 const mapStateToProps = (state, ownProps) => {
-    const userInfo = getUserInfo(state) || {};
+    const userInfo = getUserInfo(state);
+    const activated = userInfo && userInfo.activated ? userInfo.activated : false;
     const post = getPost(state, ownProps.postId);
+    const translation = post && post.translation ? post.translation : null;
     return {
-        activated: userInfo.activated,
-        translation: post.translation || {},
+        activated,
+        translation,
     };
 };
 
@@ -21,4 +23,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     hide: hideTranslatedMessage,
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostMessageAttachment);
+export default connect(mapStateToProps, mapDispatchToProps)(TranslatedMessage);
