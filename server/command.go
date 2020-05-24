@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/pkg/errors"
+
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
@@ -64,15 +66,19 @@ var LANGUAGE_CODES = map[string]interface{}{
 	"tr":   "Turkish",
 }
 
-func getCommand() *model.Command {
-	return &model.Command{
+func (p *Plugin) registerCommands() error {
+	if err := p.API.RegisterCommand(&model.Command{
 		Trigger:          "autotranslate",
 		DisplayName:      "Autotranslate",
 		Description:      "Mattermost Autotranslation Plugin",
 		AutoComplete:     true,
 		AutoCompleteDesc: "Available commands: info, on, off, source, target, help",
 		AutoCompleteHint: "[command]",
+	}); err != nil {
+		return errors.Wrap(err, "failed to register autotranslate command")
 	}
+
+	return nil
 }
 
 func getCommandResponse(responseType, text string) *model.CommandResponse {

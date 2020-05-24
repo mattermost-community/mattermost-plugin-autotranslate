@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
@@ -15,10 +16,13 @@ const (
 
 type Plugin struct {
 	plugin.MattermostPlugin
-	AWSAccessKeyID     string
-	AWSSecretAccessKey string
-	AWSRegion          string
-	disabled           bool
+
+	// configurationLock synchronizes access to the configuration.
+	configurationLock sync.RWMutex
+
+	// configuration is the active plugin configuration. Consult getConfiguration and
+	// setConfiguration for usage.
+	configuration *configuration
 }
 
 type TranslatedMessage struct {
@@ -86,32 +90,6 @@ func (u *UserInfo) IsValid() error {
 
 	if u.TargetLanguage == LANGUAGE_AUTO {
 		return fmt.Errorf("Invalid: target_language must not be auto")
-	}
-
-	return nil
-}
-
-func (p *Plugin) OnActivate() error {
-	if err := p.IsValid(); err != nil {
-		return err
-	}
-
-	p.API.RegisterCommand(getCommand())
-
-	return nil
-}
-
-func (p *Plugin) IsValid() error {
-	if p.AWSAccessKeyID == "" {
-		return fmt.Errorf("Must have AWS Access Key ID")
-	}
-
-	if p.AWSSecretAccessKey == "" {
-		return fmt.Errorf("Must have AWS Secret Access Key")
-	}
-
-	if p.AWSRegion == "" {
-		return fmt.Errorf("AWS Region")
 	}
 
 	return nil

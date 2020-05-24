@@ -1,2 +1,4 @@
 dist
 .vs.json
+
+.DS_Store

@@ -1,8 +1,11 @@
 {
     "id": "autotranslate",
     "name": "Autotranslate",
-    "description": "Autotranslate plugin for Mattermost 5.4 and later.",
-    "version": "0.2.0",
+    "description": "Autotranslate plugin for Mattermost 5.22 and later.",
+    "homepage_url": "https://github.com/mattermost/mattermost-plugin-autotranslate",
+    "support_url": "https://github.com/mattermost/mattermost-plugin-autotranslate/issues",
+    "version": "0.3.0",
+    "min_server_version": "5.22.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/plugin-linux-amd64",
@@ -31,7 +34,8 @@
                 "key": "AWSRegion",
                 "display_name": "AWS Region",
                 "type": "text",
-                "help_text": "The region from AWS"
+                "help_text": "The region from AWS",
+                "default": "us-east-1"
             }
         ]
     }

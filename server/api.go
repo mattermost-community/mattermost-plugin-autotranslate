@@ -76,15 +76,16 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	configuration := p.getConfiguration()
 	sess := session.Must(session.NewSession())
-	creds := credentials.NewStaticCredentials(p.AWSAccessKeyID, p.AWSSecretAccessKey, "")
+	creds := credentials.NewStaticCredentials(configuration.AWSAccessKeyID, configuration.AWSSecretAccessKey, "")
 	_, awsErr := creds.Get()
 	if awsErr != nil {
 		http.Error(w, "Bad credentials", http.StatusForbidden)
 		return
 	}
 
-	svc := translate.New(sess, aws.NewConfig().WithCredentials(creds).WithRegion(p.AWSRegion))
+	svc := translate.New(sess, aws.NewConfig().WithCredentials(creds).WithRegion(configuration.AWSRegion))
 
 	input := translate.TextInput{
 		SourceLanguageCode: &source,
