@@ -46,7 +46,6 @@ func (p *Plugin) getConfiguration() *configuration {
 	p.configurationLock.RLock()
 	defer p.configurationLock.RUnlock()
 
-	fmt.Printf("\n\n--- > getConfiguration p.configuration: %+v \n\n", p.configuration)
 	if p.configuration == nil {
 		return &configuration{}
 	}
@@ -64,8 +63,6 @@ func (p *Plugin) getConfiguration() *configuration {
 // certainly means that the configuration was modified without being cloned and may result in
 // an unsafe access.
 func (p *Plugin) setConfiguration(configuration *configuration) {
-	fmt.Printf("\n\n--- > setConfiguration configuration: %+v \n\n", configuration)
-	fmt.Printf("\n\n--- > setConfiguration p.configuration: %+v \n\n", p.configuration)
 	p.configurationLock.Lock()
 	defer p.configurationLock.Unlock()
 
@@ -98,14 +95,10 @@ func (p *Plugin) diffConfiguration(newConfiguration *configuration) {
 func (p *Plugin) OnConfigurationChange() error {
 	configuration := p.getConfiguration().Clone()
 
-	fmt.Printf("\n\n--- > OnConfigurationChange configuration: %+v \n\n", configuration)
-
 	// Load the public configuration fields from the Mattermost server configuration.
 	if loadConfigErr := p.API.LoadPluginConfiguration(configuration); loadConfigErr != nil {
 		return errors.Wrap(loadConfigErr, "failed to load plugin configuration")
 	}
-
-	fmt.Printf("\n\n--- > After OnConfigurationChange configuration: %+v \n\n", configuration)
 
 	p.diffConfiguration(configuration)
 
@@ -124,9 +117,6 @@ func (p *Plugin) setEnabled(enabled bool) {
 
 func (p *Plugin) IsValid() error {
 	configuration := p.getConfiguration()
-	fmt.Printf("\n\n\n--- > configuration.AWSAccessKeyID: %+v\n", configuration.AWSAccessKeyID)
-	fmt.Printf("\n\n\n--- > configuration.AWSSecretAccessKey: %+v\n", configuration.AWSSecretAccessKey)
-	fmt.Printf("\n\n\n--- > configuration.AWSRegion: %+v\n", configuration.AWSRegion)
 	if configuration.AWSAccessKeyID == "" {
 		return fmt.Errorf("Must have AWS Access Key ID")
 	}
@@ -136,8 +126,6 @@ func (p *Plugin) IsValid() error {
 	}
 
 	if configuration.AWSRegion == "" {
-		// return fmt.Errorf("AWS Region")
-		fmt.Println("Set default region for Autotranslate plugin")
 		configuration.AWSRegion = "us-east-1"
 	}
 

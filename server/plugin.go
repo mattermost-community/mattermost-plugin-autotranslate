@@ -76,20 +76,8 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: source_language and target_language are equal")
 	}
 
-	if u.SourceLanguage == LANGUAGE_EN && u.TargetLanguage == LANGUAGE_EN {
-		return fmt.Errorf("Invalid: source_language and target_language should not be both English")
-	}
-
-	if u.SourceLanguage != LANGUAGE_EN && u.TargetLanguage != LANGUAGE_EN {
-		return fmt.Errorf("Invalid: Either source_language or target_language should be English")
-	}
-
-	if u.SourceLanguage == LANGUAGE_AUTO && u.TargetLanguage != LANGUAGE_EN {
-		return fmt.Errorf("Invalid: if source_language is auto, target_language must be en")
-	}
-
 	if u.TargetLanguage == LANGUAGE_AUTO {
-		return fmt.Errorf("Invalid: target_language must not be auto")
+		return fmt.Errorf("Invalid: target_language must not be \"auto\"")
 	}
 
 	return nil

@@ -18,52 +18,78 @@ const (
 )
 
 const COMMAND_HELP = `
-This autotranslation plugin is powered by Amazon Translate which supports translation between English and any of the following languages: Arabic, Chinese (Simplified), Chinese (Traditional), Czech, French, German, Italian, Japanese, Portuguese, Russian, Spanish, and Turkish.
+This plugin is powered by Amazon Translate which is a text translation service that uses advanced machine learning technologies to provide high-quality translation on demand. Amazon Translate can translate text between the languages listed in its [website](https://docs.aws.amazon.com/translate/latest/dg/what-is.html).
 
-* |/autotranslate on| - Add an option to translate a post and will have default setting of Auto as source and English as target.
+* |/autotranslate on| - Add an option to translate a post with the default setting of Auto as source and English as target.
 * |/autotranslate off| - Remove an option to translate a post
 * |/autotranslate info| - Show user info on this plugin
 * |/autotranslate source [value]| - Update your autotranslation source
-  * |value| can be any of the supported language codes below.
-  * Note: Changing source setting will automatically update target into English.
-     * Ex. |/autotranslate source ar| will set source to Arabic and target to English
-    * Ex. |/autotranslate source auto| will set source to Auto and target to English
+  * |value| can be any of the [supported language codes](https://docs.aws.amazon.com/translate/latest/dg/what-is.html) or "auto" to automatically detect language used.
 * |/autotranslate target [value]| - Update your autotranslation target
-  * |value| can be any of the supported language codes below except auto.
-  * Note: In most cases, changing target setting will automatically update source into English.
-    * Ex. |/autotranslate target ar| will set target to Arabic and source to English
-    * Ex. |/autotranslate target auto| will not change target settings and will return an error
-    * Ex. |/autotranslate target en| will set target to English and automatically set source to Auto
-* |Language codes|:
-  * auto (Auto) : Automatic detection based on supported language below
-  * ar (Arabic)
-  * zh (Chinese)
-  * cs (Czech)
-  * fr (French)
-  * de (German)
-  * en (English)
-  * es (Spanish)
-  * it (Italian)
-  * ja (Japanese)
-  * pt (Portuguese)
-  * ru (Russian)
-  * tr (Turkish)
+  * |value| can be any of the [supported language codes](https://docs.aws.amazon.com/translate/latest/dg/what-is.html).
+* |Language codes|: See [AWS Translate supported languages](https://docs.aws.amazon.com/translate/latest/dg/what-is.html)
   `
 
+// See https://docs.aws.amazon.com/translate/latest/dg/what-is.html for updated supported languages.
+// Below is hard-coded but would be nice if AWS SDK supports getting the list programmatically
+// which is not the case currently.
 var LANGUAGE_CODES = map[string]interface{}{
-	"auto": "Auto",
-	"ar":   "Arabic",
-	"zh":   "Chinese",
-	"cs":   "Czech",
-	"fr":   "French",
-	"de":   "German",
-	"en":   "English",
-	"es":   "Spanish",
-	"it":   "Italian",
-	"ja":   "Japanese",
-	"pt":   "Portuguese",
-	"ru":   "Russian",
-	"tr":   "Turkish",
+	"auto":  "Auto",
+	"af":    "Afrikaans",
+	"sq":    "Albanian",
+	"am":    "Amharic",
+	"ar":    "Arabic",
+	"az":    "Azerbaijani",
+	"bn":    "Bengali",
+	"bs":    "Bosnian",
+	"bg":    "Bulgarian",
+	"zh":    "Chinese (Simplified)",
+	"zh-TW": "Chinese (Traditional)",
+	"hr":    "Croatian",
+	"cs":    "Czech",
+	"da":    "Danish",
+	"fa-AF": "Dari",
+	"nl":    "Dutch",
+	"en":    "English",
+	"et":    "Estonian",
+	"fi":    "Finnish",
+	"fr":    "French",
+	"fr-CA": "French (Canada)",
+	"ka":    "Georgian",
+	"de":    "German",
+	"el":    "Greek",
+	"ha":    "Hausa",
+	"he":    "Hebrew",
+	"hi":    "Hindi",
+	"hu":    "Hungarian",
+	"id":    "Indonesian",
+	"it":    "Italian",
+	"ja":    "Japanese",
+	"ko":    "Korean",
+	"lv":    "Latvian",
+	"ms":    "Malay",
+	"no":    "Norwegian",
+	"fa":    "Persian",
+	"ps":    "Pashto",
+	"pl":    "Polish",
+	"pt":    "Portuguese",
+	"ro":    "Romanian",
+	"ru":    "Russian",
+	"sr":    "Serbian",
+	"sk":    "Slovak",
+	"sl":    "Slovenian",
+	"so":    "Somali",
+	"es":    "Spanish",
+	"es-MX": "Spanish (Mexico)",
+	"sw":    "Swahili",
+	"sv":    "Swedish",
+	"tl":    "Tagalog",
+	"ta":    "Tamil",
+	"th":    "Thai",
+	"tr":    "Turkish",
+	"uk":    "Ukrainian",
+	"ur":    "Urdu",
+	"vi":    "Vietnamese",
 }
 
 func (p *Plugin) registerCommands() error {
@@ -179,19 +205,15 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "No record found. If not yet turned on for the first time, try `/autotranslate on` to enable. Otherwise, your record is lost for unknown reason."), nil
 		}
 
-		if param == "" || LANGUAGE_CODES[param] == nil {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid parameter. Shoud pass a valid language code to change the source language"), nil
+		if param == "" {
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty source language. Shoud pass a valid language code or set to \"auto\"."), nil
 		}
 
-		if param == userInfo.TargetLanguage { // switch language setting
-			oldSource := userInfo.SourceLanguage
-			userInfo.SourceLanguage = param
-			userInfo.TargetLanguage = oldSource
-		} else if param != LANGUAGE_EN {
-			userInfo.SourceLanguage = param
-			userInfo.TargetLanguage = LANGUAGE_EN
+		if LANGUAGE_CODES[param] == nil {
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" source language. Shoud pass a valid language code or set to \"auto\".", param)), nil
 		}
 
+		userInfo.SourceLanguage = param
 		err = p.setUserInfo(userInfo)
 		return setUserInfoCommandResponse(userInfo, err, action)
 	case "target":
@@ -199,22 +221,19 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "No record found. If not yet turned on for the first time, try `/autotranslate on` to enable."), nil
 		}
 
-		if param == "" || LANGUAGE_CODES[param] == nil {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid parameter. Shoud pass a valid language code to change the target language"), nil
+		if param == "" {
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty target language. Shoud pass a valid language code."), nil
 		}
 
-		if param != LANGUAGE_AUTO && param == userInfo.SourceLanguage { // switch language setting
-			oldTarget := userInfo.TargetLanguage
-			userInfo.TargetLanguage = param
-			userInfo.SourceLanguage = oldTarget
-		} else if param == LANGUAGE_EN {
-			userInfo.TargetLanguage = LANGUAGE_EN
-			userInfo.SourceLanguage = LANGUAGE_AUTO
-		} else {
-			userInfo.TargetLanguage = param
-			userInfo.SourceLanguage = LANGUAGE_EN
+		if param == "auto" {
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Target language can't be set to \"auto\". Shoud pass a valid language code."), nil
 		}
 
+		if LANGUAGE_CODES[param] == nil {
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" target language. Shoud pass a valid language code.", param)), nil
+		}
+
+		userInfo.TargetLanguage = param
 		err = p.setUserInfo(userInfo)
 		return setUserInfoCommandResponse(userInfo, err, action)
 	default:

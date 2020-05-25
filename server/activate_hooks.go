@@ -38,7 +38,6 @@ func (p *Plugin) OnActivate() error {
 		p.API.LogError("Server configuration is not compatible")
 	}
 
-	fmt.Println("\n\n--- > OnActivate p.IsValid\n\n")
 	if err := p.IsValid(); err != nil {
 		return err
 	}
