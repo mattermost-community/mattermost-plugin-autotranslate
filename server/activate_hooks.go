@@ -49,16 +49,6 @@ func (p *Plugin) OnActivate() error {
 	return nil
 }
 
-// OnDeactivate is invoked when the plugin is deactivated. This is the plugin's last chance to use
-// the API, and the plugin will be terminated shortly after this invocation.
-//
-// This demo implementation logs a message to the demo channel whenever the plugin is deactivated.
-// func (p *Plugin) OnDeactivate() error {
-// 	configuration := p.getConfiguration()
-
-// 	return nil
-// }
-
 func (p *Plugin) checkRequiredServerConfiguration() (bool, error) {
 	return p.Helpers.CheckRequiredServerConfiguration(manifest.RequiredConfig)
 }

@@ -11,9 +11,10 @@ import (
 )
 
 const (
-	API_ERROR_NO_RECORD_FOUND = "no_record_found"
+	apiErrorNoRecordFound = "no_record_found"
 )
 
+// Plugin is a collection of fields for plugin
 type Plugin struct {
 	plugin.MattermostPlugin
 
@@ -25,9 +26,10 @@ type Plugin struct {
 	configuration *configuration
 }
 
+// TranslatedMessage is a collection of fields for translated message
 type TranslatedMessage struct {
-	Id             string `json:"id"`
-	PostId         string `json:"post_id"`
+	ID             string `json:"id"`
+	PostID         string `json:"post_id"`
 	SourceLanguage string `json:"source_lang"`
 	SourceText     string `json:"source_text"`
 	TargetLanguage string `json:"target_lang"`
@@ -35,6 +37,7 @@ type TranslatedMessage struct {
 	UpdateAt       int64  `json:"update_at"`
 }
 
+// UserInfo is a collection of fields for user info
 type UserInfo struct {
 	UserID         string `json:"user_id"`
 	Activated      bool   `json:"activated"`
@@ -42,15 +45,17 @@ type UserInfo struct {
 	TargetLanguage string `json:"target_language"`
 }
 
-func (p *Plugin) NewUserInfo(userId string) *UserInfo {
+// NewUserInfo returns new user info
+func (p *Plugin) NewUserInfo(userID string) *UserInfo {
 	return &UserInfo{
-		UserID:         userId,
+		UserID:         userID,
 		Activated:      true,
-		SourceLanguage: LANGUAGE_AUTO,
-		TargetLanguage: LANGUAGE_EN,
+		SourceLanguage: autoLanguage,
+		TargetLanguage: enLanguage,
 	}
 }
 
+// IsValid validates user information
 func (u *UserInfo) IsValid() error {
 	if u.UserID == "" || len(u.UserID) != 26 {
 		return fmt.Errorf("Invalid: user_id field")
@@ -64,11 +69,11 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: target_language field")
 	}
 
-	if LANGUAGE_CODES[u.SourceLanguage] == nil {
+	if languageCodes[u.SourceLanguage] == nil {
 		return fmt.Errorf("Invalid: source_language must be in a supported language code")
 	}
 
-	if LANGUAGE_CODES[u.TargetLanguage] == nil {
+	if languageCodes[u.TargetLanguage] == nil {
 		return fmt.Errorf("Invalid: target_language must be in a supported language code")
 	}
 
@@ -76,7 +81,7 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: source_language and target_language are equal")
 	}
 
-	if u.TargetLanguage == LANGUAGE_AUTO {
+	if u.TargetLanguage == autoLanguage {
 		return fmt.Errorf("Invalid: target_language must not be \"auto\"")
 	}
 
@@ -87,7 +92,7 @@ func (p *Plugin) getUserInfo(userID string) (*UserInfo, *APIErrorResponse) {
 	var userInfo UserInfo
 
 	if infoBytes, err := p.API.KVGet(userID); err != nil || infoBytes == nil {
-		return nil, &APIErrorResponse{ID: API_ERROR_NO_RECORD_FOUND, Message: "No record found.", StatusCode: http.StatusBadRequest}
+		return nil, &APIErrorResponse{ID: apiErrorNoRecordFound, Message: "No record found.", StatusCode: http.StatusBadRequest}
 	} else if err := json.Unmarshal(infoBytes, &userInfo); err != nil {
 		return nil, &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to unmarshal json.", StatusCode: http.StatusBadRequest}
 	}

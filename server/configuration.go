@@ -115,6 +115,7 @@ func (p *Plugin) setEnabled(enabled bool) {
 	p.setConfiguration(configuration)
 }
 
+// IsValid validates plugin configuration
 func (p *Plugin) IsValid() error {
 	configuration := p.getConfiguration()
 	if configuration.AWSAccessKeyID == "" {

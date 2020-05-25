@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/translate"
 )
 
+// APIErrorResponse as standard response error
 type APIErrorResponse struct {
 	ID         string `json:"id"`
 	Message    string `json:"message"`
@@ -100,8 +101,8 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	translated := TranslatedMessage{
-		Id:             postID + source + target + strconv.FormatInt(post.UpdateAt, 10),
-		PostId:         postID,
+		ID:             postID + source + target + strconv.FormatInt(post.UpdateAt, 10),
+		PostID:         postID,
 		SourceLanguage: source,
 		SourceText:     post.Message,
 		TargetLanguage: target,

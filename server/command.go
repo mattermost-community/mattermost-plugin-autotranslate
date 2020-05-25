@@ -11,13 +11,13 @@ import (
 )
 
 const (
-	TRANSLATE_USERNAME = "Autotranslate Plugin"
-	TRANSLATE_ICON_URL = "https://docs.mattermost.com/_images/icon-76x76.png"
-	LANGUAGE_EN        = "en"
-	LANGUAGE_AUTO      = "auto"
+	translateUsername = "Autotranslate Plugin"
+	translateIconURL  = "https://docs.mattermost.com/_images/icon-76x76.png"
+	enLanguage        = "en"
+	autoLanguage      = "auto"
 )
 
-const COMMAND_HELP = `
+const commandHelp = `
 This plugin is powered by Amazon Translate which is a text translation service that uses advanced machine learning technologies to provide high-quality translation on demand. Amazon Translate can translate text between the languages listed in its [website](https://docs.aws.amazon.com/translate/latest/dg/what-is.html).
 
 * |/autotranslate on| - Add an option to translate a post with the default setting of Auto as source and English as target.
@@ -33,7 +33,7 @@ This plugin is powered by Amazon Translate which is a text translation service t
 // See https://docs.aws.amazon.com/translate/latest/dg/what-is.html for updated supported languages.
 // Below is hard-coded but would be nice if AWS SDK supports getting the list programmatically
 // which is not the case currently.
-var LANGUAGE_CODES = map[string]interface{}{
+var languageCodes = map[string]interface{}{
 	"auto":  "Auto",
 	"af":    "Afrikaans",
 	"sq":    "Albanian",
@@ -111,8 +111,8 @@ func getCommandResponse(responseType, text string) *model.CommandResponse {
 	return &model.CommandResponse{
 		ResponseType: responseType,
 		Text:         text,
-		Username:     TRANSLATE_USERNAME,
-		IconURL:      TRANSLATE_ICON_URL,
+		Username:     translateUsername,
+		IconURL:      translateIconURL,
 		Type:         model.POST_DEFAULT,
 	}
 }
@@ -133,7 +133,7 @@ func setUserInfoCommandResponse(userInfo *UserInfo, err *APIErrorResponse, actio
 		}
 
 		text := fmt.Sprintf("An error occurred %s. `%s`", actionMapping[action], errorMessage)
-		if err.ID == API_ERROR_NO_RECORD_FOUND {
+		if err.ID == apiErrorNoRecordFound {
 			text = "No record found. If not yet turned on for the first time, try `/autotranslate on` to enable."
 		}
 
@@ -142,7 +142,7 @@ func setUserInfoCommandResponse(userInfo *UserInfo, err *APIErrorResponse, actio
 
 	text := fmt.Sprintf(
 		"Successfully updated!\nYour autotranslation plugin settings:\n * Active: `%s`\n * Language: `source: %s`, `target: %s`\n",
-		userInfo.getActivatedString(), LANGUAGE_CODES[userInfo.SourceLanguage], LANGUAGE_CODES[userInfo.TargetLanguage],
+		userInfo.getActivatedString(), languageCodes[userInfo.SourceLanguage], languageCodes[userInfo.TargetLanguage],
 	)
 
 	if action == "off" {
@@ -152,6 +152,7 @@ func setUserInfoCommandResponse(userInfo *UserInfo, err *APIErrorResponse, actio
 	return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, text), nil
 }
 
+// ExecuteCommand executes a command that has been previously registered via the RegisterCommand API.
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 	command := split[0]
@@ -170,7 +171,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	var text = ""
 	if action == "" || action == "help" {
-		text = "###### Mattermost Autotranslate Plugin - Slash Command Help\n" + strings.Replace(COMMAND_HELP, "|", "`", -1)
+		text = "###### Mattermost Autotranslate Plugin - Slash Command Help\n" + strings.Replace(commandHelp, "|", "`", -1)
 		return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, text), nil
 	}
 
@@ -209,7 +210,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty source language. Shoud pass a valid language code or set to \"auto\"."), nil
 		}
 
-		if LANGUAGE_CODES[param] == nil {
+		if languageCodes[param] == nil {
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" source language. Shoud pass a valid language code or set to \"auto\".", param)), nil
 		}
 
@@ -229,7 +230,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Target language can't be set to \"auto\". Shoud pass a valid language code."), nil
 		}
 
-		if LANGUAGE_CODES[param] == nil {
+		if languageCodes[param] == nil {
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" target language. Shoud pass a valid language code.", param)), nil
 		}
 
@@ -237,7 +238,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		err = p.setUserInfo(userInfo)
 		return setUserInfoCommandResponse(userInfo, err, action)
 	default:
-		text = "###### Mattermost Autotranslate Plugin - Slash Command Help\n" + strings.Replace(COMMAND_HELP, "|", "`", -1)
+		text = "###### Mattermost Autotranslate Plugin - Slash Command Help\n" + strings.Replace(commandHelp, "|", "`", -1)
 		return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, text), nil
 	}
 }
