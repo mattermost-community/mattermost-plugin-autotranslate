@@ -1,6 +1,10 @@
 import {combineReducers} from 'redux';
 
-import {INFO_CHANGE, TRANSLATE_POST_SUCCESS} from './action_types';
+import {
+    INFO_CHANGE,
+    SAVE_TRANSLATED_POST,
+    SAVE_TRANSLATION,
+} from './action_types';
 
 const userInfo = (state = {}, action) => {
     switch (action.type) {
@@ -14,7 +18,20 @@ const userInfo = (state = {}, action) => {
 
 const translatedPosts = (state = {}, action) => {
     switch (action.type) {
-    case TRANSLATE_POST_SUCCESS: {
+    case SAVE_TRANSLATED_POST: {
+        const nextState = {};
+        nextState[action.data.post_id] = action.data;
+
+        return {...state, ...nextState};
+    }
+    default:
+        return state;
+    }
+};
+
+const translations = (state = {}, action) => {
+    switch (action.type) {
+    case SAVE_TRANSLATION: {
         const nextState = {};
         nextState[action.data.id] = action.data;
 
@@ -27,5 +44,6 @@ const translatedPosts = (state = {}, action) => {
 
 export default combineReducers({
     translatedPosts,
+    translations,
     userInfo,
 });

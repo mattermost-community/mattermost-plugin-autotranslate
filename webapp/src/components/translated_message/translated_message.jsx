@@ -5,7 +5,7 @@ export default class TranslatedMessage extends React.PureComponent {
     static propTypes = {
         activated: PropTypes.bool.isRequired,
         translation: PropTypes.object,
-        hide: PropTypes.func,
+        hideTranslatedMessage: PropTypes.func.isRequired,
         onHeightChange: PropTypes.func,
     }
 
@@ -22,8 +22,8 @@ export default class TranslatedMessage extends React.PureComponent {
         }
     }
 
-    handleOnClick = () => {
-        this.props.hide(this.props.translation.post_id);
+    handleCloseMessage = () => {
+        this.props.hideTranslatedMessage(this.props.translation.post_id);
         this.props.onHeightChange(1);
     }
 
@@ -33,7 +33,7 @@ export default class TranslatedMessage extends React.PureComponent {
                 <p>
                     <i className='icon fa fa-language'/>
                     {message}
-                    <a onClick={this.handleOnClick}>{'(close)'}</a>
+                    <a onClick={this.handleCloseMessage}>{'(close)'}</a>
                 </p>
             </React.Fragment>
         );
@@ -48,7 +48,7 @@ export default class TranslatedMessage extends React.PureComponent {
 
         if (translation.errorMessage) {
             return this.renderMessage(
-                <span style={{color: 'red'}}>{`  ${translation.errorMessage}  `}</span>
+                <span style={{color: 'red'}}>{`  ${translation.errorMessage}  `}</span>,
             );
         }
 
@@ -56,7 +56,7 @@ export default class TranslatedMessage extends React.PureComponent {
             <React.Fragment>
                 <span>{'  See translation:\n'}</span>
                 <span>{`${translation.translated_text}  `}</span>
-            </React.Fragment>
+            </React.Fragment>,
         );
     }
 }

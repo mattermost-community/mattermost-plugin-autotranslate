@@ -8,7 +8,7 @@ import TranslateMenuItem from './components/translate_menu_item';
 import PluginId from './plugin_id';
 
 import {
-    postDropdownMenuAction,
+    getTranslatedMessage,
     getInfo,
     websocketInfoChange,
 } from './actions';
@@ -26,7 +26,7 @@ export default class AWSTranslatePlugin {
         registry.registerPostMessageAttachmentComponent(PostMessageAttachment);
         registry.registerPostDropdownMenuAction(
             <TranslateMenuItem/>,
-            (postId) => store.dispatch(postDropdownMenuAction(postId)),
+            (postId) => store.dispatch(getTranslatedMessage(postId)),
             (postId) => {
                 const state = store.getState();
                 const post = getPost(state, postId);
