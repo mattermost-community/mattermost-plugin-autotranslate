@@ -73,24 +73,6 @@ func (p *Plugin) setConfiguration(configuration *configuration) {
 	p.configuration = configuration
 }
 
-func (p *Plugin) diffConfiguration(newConfiguration *configuration) {
-	oldConfiguration := p.getConfiguration()
-	configurationDiff := make(map[string]interface{})
-
-	if newConfiguration.AWSAccessKeyID != oldConfiguration.AWSAccessKeyID {
-		configurationDiff["aws_access_key_id"] = newConfiguration.AWSAccessKeyID
-	}
-	if newConfiguration.AWSSecretAccessKey != oldConfiguration.AWSSecretAccessKey {
-		configurationDiff["aws_secret_access_key"] = newConfiguration.AWSSecretAccessKey
-	}
-	if newConfiguration.AWSRegion != oldConfiguration.AWSRegion {
-		configurationDiff["aws_region"] = newConfiguration.AWSRegion
-	}
-	if newConfiguration.disabled != oldConfiguration.disabled {
-		configurationDiff["disabled"] = newConfiguration.disabled
-	}
-}
-
 // OnConfigurationChange is invoked when configuration changes may have been made.
 func (p *Plugin) OnConfigurationChange() error {
 	configuration := p.getConfiguration().Clone()
@@ -99,8 +81,6 @@ func (p *Plugin) OnConfigurationChange() error {
 	if loadConfigErr := p.API.LoadPluginConfiguration(configuration); loadConfigErr != nil {
 		return errors.Wrap(loadConfigErr, "failed to load plugin configuration")
 	}
-
-	p.diffConfiguration(configuration)
 
 	p.setConfiguration(configuration)
 

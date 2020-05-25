@@ -33,7 +33,7 @@ This plugin is powered by Amazon Translate which is a text translation service t
 // See https://docs.aws.amazon.com/translate/latest/dg/what-is.html for updated supported languages.
 // Below is hard-coded but would be nice if AWS SDK supports getting the list programmatically
 // which is not the case currently.
-var languageCodes = map[string]interface{}{
+var languageCodes = map[string]string{
 	"auto":  "Auto",
 	"af":    "Afrikaans",
 	"sq":    "Albanian",
@@ -210,7 +210,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty source language. Shoud pass a valid language code or set to \"auto\"."), nil
 		}
 
-		if languageCodes[param] == nil {
+		if languageCodes[param] == "" {
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" source language. Shoud pass a valid language code or set to \"auto\".", param)), nil
 		}
 
@@ -230,7 +230,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Target language can't be set to \"auto\". Shoud pass a valid language code."), nil
 		}
 
-		if languageCodes[param] == nil {
+		if languageCodes[param] == "" {
 			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" target language. Shoud pass a valid language code.", param)), nil
 		}
 

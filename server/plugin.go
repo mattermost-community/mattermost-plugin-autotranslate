@@ -69,11 +69,11 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: target_language field")
 	}
 
-	if languageCodes[u.SourceLanguage] == nil {
+	if languageCodes[u.SourceLanguage] == "" {
 		return fmt.Errorf("Invalid: source_language must be in a supported language code")
 	}
 
-	if languageCodes[u.TargetLanguage] == nil {
+	if languageCodes[u.TargetLanguage] == "" {
 		return fmt.Errorf("Invalid: target_language must be in a supported language code")
 	}
 
