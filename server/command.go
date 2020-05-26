@@ -183,7 +183,11 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	switch action {
 	case "info":
-		return setUserInfoCommandResponse(userInfo, err, action)
+		text = fmt.Sprintf(
+			"Your autotranslation plugin settings:\n * Active: `%s`\n * Language: `source: %s`, `target: %s`\n",
+			userInfo.getActivatedString(), languageCodes[userInfo.SourceLanguage], languageCodes[userInfo.TargetLanguage],
+		)
+		return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, text), nil
 	case "on":
 		if userInfo == nil {
 			userInfo = p.NewUserInfo(args.UserId)
