@@ -3,6 +3,8 @@ import request from 'superagent';
 import PluginId from './plugin_id';
 import {buildQueryString} from './utils';
 
+/* eslint-disable no-useless-catch */
+
 class ClientClass {
     constructor() {
         this.url = `/plugins/${PluginId}/api`;

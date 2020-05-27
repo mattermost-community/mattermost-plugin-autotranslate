@@ -1,9 +1,9 @@
 module github.com/mattermost/mattermost-plugin-autotranslate
 
-go 1.12
+go 1.14
 
 require (
-	github.com/aws/aws-sdk-go v1.26.6
-	github.com/mattermost/mattermost-server/v5 v5.18.0
-	github.com/pkg/errors v0.8.1
+	github.com/aws/aws-sdk-go v1.19.0
+	github.com/mattermost/mattermost-server/v5 v5.23.0
+	github.com/pkg/errors v0.9.1
 )

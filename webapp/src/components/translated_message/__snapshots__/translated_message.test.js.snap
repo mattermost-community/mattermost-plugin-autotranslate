@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should not render any message 2`] = `<div />`;
+
+exports[`should render error message 1`] = `
+<div>
+  <p>
+    <i
+      class="icon fa fa-language"
+    />
+    <span
+      style="color: red;"
+    >
+        Failed to get translation  
+    </span>
+    <a>
+      (close)
+    </a>
+  </p>
+</div>
+`;
+
+exports[`should render translated message 1`] = `
+<div>
+  <p>
+    <i
+      class="icon fa fa-language"
+    />
+    <span>
+        See translation:
+
+    </span>
+    <span>
+      Hello world  
+    </span>
+    <a>
+      (close)
+    </a>
+  </p>
+</div>
+`;

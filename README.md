@@ -1,34 +1,23 @@
 ## Mattermost Autotranslation Plugin (beta) [![CircleCI](https://circleci.com/gh/mattermost/mattermost-plugin-autotranslate.svg?style=svg)](https://circleci.com/gh/mattermost/mattermost-plugin-autotranslate)
 
-Autotranslation plugin for Mattermost.
+**Maintainer:** [@saturninoabril](https://github.com/saturninoabril)
 
-Message autotranslation is powered by Amazon Translate which supports translation between English and any of the following languages: Arabic, Chinese (Simplified), Chinese (Traditional), Czech, French, German, Italian, Japanese, Portuguese, Russian, Spanish, and Turkish.
+### Autotranslation plugin for Mattermost.
+
+Message autotranslation is powered by Amazon Translate which is a text translation service that uses advanced machine learning technologies to provide high-quality translation on demand. Amazon Translate can translate text between the languages listed in its [website](https://docs.aws.amazon.com/translate/latest/dg/what-is.html).
 
 ### Feature
 * __Translate__ option available at dropdown menu of each regular post.
 * __Slash commands__ to change user settings using `/autotranslate` slash command
     * __Check user info__ by issuing `/autotranslate info` to see current user setting
     * __Turn on/off__ translation by issuing `/autotranslate [on|off]`
-    * __Change source language__ translation by initiating `/autotranslate source [language code]` (see language codes below)
-    * __Change target language__ translation by initiating `/autotranslate target [language code]` (see language codes below)
-* __Supported Languages and its codes__
-    * __auto__ : Automatic language detection
-    * __ar__ : Arabic
-    * __zh__ : Chinese
-    * __cs__ : Czech
-    * __fr__ : French
-    * __de__ : German
-    * __en__ : English
-    * __es__ : Spanish
-    * __it__ : Italian
-    * __ja__ : Japanese
-    * __pt__ : Portuguese
-    * __ru__ : Russian
-    * __tr__ : Turkish
+    * __Change source language__ translation by initiating `/autotranslate source [language code]`
+    * __Change target language__ translation by initiating `/autotranslate target [language code]`
+* __Supported Languages and its codes__ can be found at [Amazon Translate website](https://docs.aws.amazon.com/translate/latest/dg/what-is.html). 
 
 ### Installation
 
-__Requires Mattermost 5.4 or higher__
+__Requires Mattermost 5.22 or higher__
 
 1. Install the plugin
     1. Download the latest version of the plugin from the GitHub releases page

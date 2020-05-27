@@ -8,22 +8,21 @@ module.exports = {
         modules: [
             'src',
             'node_modules',
+            path.resolve(__dirname),
         ],
-        extensions: ['*', '.js', '.jsx'],
+        extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
     },
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'react'],
-                        plugins: [
-                            'transform-class-properties',
-                            'transform-object-rest-spread',
-                        ],
+                        cacheDirectory: true,
+
+                        // Babel configuration is in babel.config.js because jest requires it to be there.
                     },
                 },
             },
@@ -33,6 +32,8 @@ module.exports = {
         react: 'React',
         redux: 'Redux',
         'react-redux': 'ReactRedux',
+        'prop-types': 'PropTypes',
+        'react-bootstrap': 'ReactBootstrap',
     },
     output: {
         path: path.join(__dirname, '/dist'),

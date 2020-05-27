@@ -4,26 +4,32 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 const (
-	API_ERROR_NO_RECORD_FOUND = "no_record_found"
+	apiErrorNoRecordFound = "no_record_found"
 )
 
+// Plugin is a collection of fields for plugin
 type Plugin struct {
 	plugin.MattermostPlugin
-	AWSAccessKeyID     string
-	AWSSecretAccessKey string
-	AWSRegion          string
-	disabled           bool
+
+	// configurationLock synchronizes access to the configuration.
+	configurationLock sync.RWMutex
+
+	// configuration is the active plugin configuration. Consult getConfiguration and
+	// setConfiguration for usage.
+	configuration *configuration
 }
 
+// TranslatedMessage is a collection of fields for translated message
 type TranslatedMessage struct {
-	Id             string `json:"id"`
-	PostId         string `json:"post_id"`
+	ID             string `json:"id"`
+	PostID         string `json:"post_id"`
 	SourceLanguage string `json:"source_lang"`
 	SourceText     string `json:"source_text"`
 	TargetLanguage string `json:"target_lang"`
@@ -31,6 +37,7 @@ type TranslatedMessage struct {
 	UpdateAt       int64  `json:"update_at"`
 }
 
+// UserInfo is a collection of fields for user info
 type UserInfo struct {
 	UserID         string `json:"user_id"`
 	Activated      bool   `json:"activated"`
@@ -38,15 +45,17 @@ type UserInfo struct {
 	TargetLanguage string `json:"target_language"`
 }
 
-func (p *Plugin) NewUserInfo(userId string) *UserInfo {
+// NewUserInfo returns new user info
+func (p *Plugin) NewUserInfo(userID string) *UserInfo {
 	return &UserInfo{
-		UserID:         userId,
+		UserID:         userID,
 		Activated:      true,
-		SourceLanguage: LANGUAGE_AUTO,
-		TargetLanguage: LANGUAGE_EN,
+		SourceLanguage: autoLanguage,
+		TargetLanguage: enLanguage,
 	}
 }
 
+// IsValid validates user information
 func (u *UserInfo) IsValid() error {
 	if u.UserID == "" || len(u.UserID) != 26 {
 		return fmt.Errorf("Invalid: user_id field")
@@ -60,11 +69,11 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: target_language field")
 	}
 
-	if LANGUAGE_CODES[u.SourceLanguage] == nil {
+	if languageCodes[u.SourceLanguage] == "" {
 		return fmt.Errorf("Invalid: source_language must be in a supported language code")
 	}
 
-	if LANGUAGE_CODES[u.TargetLanguage] == nil {
+	if languageCodes[u.TargetLanguage] == "" {
 		return fmt.Errorf("Invalid: target_language must be in a supported language code")
 	}
 
@@ -72,46 +81,8 @@ func (u *UserInfo) IsValid() error {
 		return fmt.Errorf("Invalid: source_language and target_language are equal")
 	}
 
-	if u.SourceLanguage == LANGUAGE_EN && u.TargetLanguage == LANGUAGE_EN {
-		return fmt.Errorf("Invalid: source_language and target_language should not be both English")
-	}
-
-	if u.SourceLanguage != LANGUAGE_EN && u.TargetLanguage != LANGUAGE_EN {
-		return fmt.Errorf("Invalid: Either source_language or target_language should be English")
-	}
-
-	if u.SourceLanguage == LANGUAGE_AUTO && u.TargetLanguage != LANGUAGE_EN {
-		return fmt.Errorf("Invalid: if source_language is auto, target_language must be en")
-	}
-
-	if u.TargetLanguage == LANGUAGE_AUTO {
-		return fmt.Errorf("Invalid: target_language must not be auto")
-	}
-
-	return nil
-}
-
-func (p *Plugin) OnActivate() error {
-	if err := p.IsValid(); err != nil {
-		return err
-	}
-
-	p.API.RegisterCommand(getCommand())
-
-	return nil
-}
-
-func (p *Plugin) IsValid() error {
-	if p.AWSAccessKeyID == "" {
-		return fmt.Errorf("Must have AWS Access Key ID")
-	}
-
-	if p.AWSSecretAccessKey == "" {
-		return fmt.Errorf("Must have AWS Secret Access Key")
-	}
-
-	if p.AWSRegion == "" {
-		return fmt.Errorf("AWS Region")
+	if u.TargetLanguage == autoLanguage {
+		return fmt.Errorf("Invalid: target_language must not be \"auto\"")
 	}
 
 	return nil
@@ -121,7 +92,7 @@ func (p *Plugin) getUserInfo(userID string) (*UserInfo, *APIErrorResponse) {
 	var userInfo UserInfo
 
 	if infoBytes, err := p.API.KVGet(userID); err != nil || infoBytes == nil {
-		return nil, &APIErrorResponse{ID: API_ERROR_NO_RECORD_FOUND, Message: "No record found.", StatusCode: http.StatusBadRequest}
+		return nil, &APIErrorResponse{ID: apiErrorNoRecordFound, Message: "No record found.", StatusCode: http.StatusBadRequest}
 	} else if err := json.Unmarshal(infoBytes, &userInfo); err != nil {
 		return nil, &APIErrorResponse{ID: "unable_to_unmarshal", Message: "Unable to unmarshal json.", StatusCode: http.StatusBadRequest}
 	}

@@ -14,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/translate"
 )
 
+// APIErrorResponse as standard response error
 type APIErrorResponse struct {
 	ID         string `json:"id"`
 	Message    string `json:"message"`
@@ -76,15 +77,16 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	configuration := p.getConfiguration()
 	sess := session.Must(session.NewSession())
-	creds := credentials.NewStaticCredentials(p.AWSAccessKeyID, p.AWSSecretAccessKey, "")
+	creds := credentials.NewStaticCredentials(configuration.AWSAccessKeyID, configuration.AWSSecretAccessKey, "")
 	_, awsErr := creds.Get()
 	if awsErr != nil {
 		http.Error(w, "Bad credentials", http.StatusForbidden)
 		return
 	}
 
-	svc := translate.New(sess, aws.NewConfig().WithCredentials(creds).WithRegion(p.AWSRegion))
+	svc := translate.New(sess, aws.NewConfig().WithCredentials(creds).WithRegion(configuration.AWSRegion))
 
 	input := translate.TextInput{
 		SourceLanguageCode: &source,
@@ -99,8 +101,8 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	translated := TranslatedMessage{
-		Id:             postID + source + target + strconv.FormatInt(post.UpdateAt, 10),
-		PostId:         postID,
+		ID:             postID + source + target + strconv.FormatInt(post.UpdateAt, 10),
+		PostID:         postID,
 		SourceLanguage: source,
 		SourceText:     post.Message,
 		TargetLanguage: target,
