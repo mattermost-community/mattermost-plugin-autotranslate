@@ -21,21 +21,21 @@
         "settings": [
             {
                 "key": "AWSAccessKeyID",
-                "display_name": "AWS Access Key ID",
+                "display_name": "AWS Access Key ID:",
                 "type": "text",
-                "help_text": "The access key ID from AWS"
+                "help_text": "The access key ID from AWS."
             },
             {
                 "key": "AWSSecretAccessKey",
-                "display_name": "AWS Secret Access Key",
+                "display_name": "AWS Secret Access Key:",
                 "type": "text",
-                "help_text": "The secret access key from AWS"
+                "help_text": "The secret access key from AWS."
             },
             {
                 "key": "AWSRegion",
-                "display_name": "AWS Region",
+                "display_name": "AWS Region:",
                 "type": "text",
-                "help_text": "The region from AWS",
+                "help_text": "The region from AWS.",
                 "default": "us-east-1"
             }
         ]
