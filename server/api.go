@@ -60,7 +60,7 @@ func (p *Plugin) getGo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	source := r.URL.Query().Get("source")
-	if len(source) < 2 || len(source) > 4 {
+	if len(source) < 2 || len(source) > 5 {
 		http.Error(w, "Invalid parameter: source", http.StatusBadRequest)
 		return
 	}
