@@ -39,10 +39,12 @@ var languageCodes = map[string]string{
 	"sq":    "Albanian",
 	"am":    "Amharic",
 	"ar":    "Arabic",
+	"hy":    "Armenian",
 	"az":    "Azerbaijani",
 	"bn":    "Bengali",
 	"bs":    "Bosnian",
 	"bg":    "Bulgarian",
+	"ca":    "Catalan",
 	"zh":    "Chinese (Simplified)",
 	"zh-TW": "Chinese (Traditional)",
 	"hr":    "Croatian",
@@ -52,30 +54,40 @@ var languageCodes = map[string]string{
 	"nl":    "Dutch",
 	"en":    "English",
 	"et":    "Estonian",
+	"fa":    "Farsi (Persian)",
+	"tl":    "Filipino Tagalog",
 	"fi":    "Finnish",
 	"fr":    "French",
 	"fr-CA": "French (Canada)",
 	"ka":    "Georgian",
 	"de":    "German",
 	"el":    "Greek",
+	"gu":    "Gujarati",
+	"ht":    "Haitian Creole",
 	"ha":    "Hausa",
 	"he":    "Hebrew",
 	"hi":    "Hindi",
 	"hu":    "Hungarian",
+	"is":    "Icelandic",
 	"id":    "Indonesian",
 	"it":    "Italian",
 	"ja":    "Japanese",
+	"kn":    "Kannada",
+	"kk":    "Kazakh",
 	"ko":    "Korean",
 	"lv":    "Latvian",
 	"ms":    "Malay",
+	"ml":    "Malayalam",
+	"mt":    "Maltese",
+	"mn":    "Mongolian",
 	"no":    "Norwegian",
-	"fa":    "Persian",
 	"ps":    "Pashto",
 	"pl":    "Polish",
 	"pt":    "Portuguese",
 	"ro":    "Romanian",
 	"ru":    "Russian",
 	"sr":    "Serbian",
+	"si":    "Sinhala",
 	"sk":    "Slovak",
 	"sl":    "Slovenian",
 	"so":    "Somali",
@@ -83,13 +95,15 @@ var languageCodes = map[string]string{
 	"es-MX": "Spanish (Mexico)",
 	"sw":    "Swahili",
 	"sv":    "Swedish",
-	"tl":    "Tagalog",
 	"ta":    "Tamil",
+	"te":    "Telugu",
 	"th":    "Thai",
 	"tr":    "Turkish",
 	"uk":    "Ukrainian",
 	"ur":    "Urdu",
+	"uz":    "Uzbek",
 	"vi":    "Vietnamese",
+	"cy":    "Welsh",
 }
 
 func (p *Plugin) registerCommands() error {
@@ -211,11 +225,11 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		}
 
 		if param == "" {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty source language. Shoud pass a valid language code or set to \"auto\"."), nil
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty source language. Should pass a valid language code or set to \"auto\"."), nil
 		}
 
 		if languageCodes[param] == "" {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" source language. Shoud pass a valid language code or set to \"auto\".", param)), nil
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" source language. Should pass a valid language code or set to \"auto\".", param)), nil
 		}
 
 		userInfo.SourceLanguage = param
@@ -227,15 +241,15 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		}
 
 		if param == "" {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty target language. Shoud pass a valid language code."), nil
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Invalid empty target language. Should pass a valid language code."), nil
 		}
 
 		if param == "auto" {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Target language can't be set to \"auto\". Shoud pass a valid language code."), nil
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, "Target language can't be set to \"auto\". Should pass a valid language code."), nil
 		}
 
 		if languageCodes[param] == "" {
-			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" target language. Shoud pass a valid language code.", param)), nil
+			return getCommandResponse(model.COMMAND_RESPONSE_TYPE_EPHEMERAL, fmt.Sprintf("Invalid \"%s\" target language. Should pass a valid language code.", param)), nil
 		}
 
 		userInfo.TargetLanguage = param
