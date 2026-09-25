@@ -4,12 +4,12 @@ const manifest = JSON.parse(`
 {
     "id": "autotranslate",
     "name": "Autotranslate",
-    "description": "Autotranslate plugin for Mattermost 5.22 and later.",
+    "description": "Translates messages in Mattermost using Amazon Translate.",
     "homepage_url": "https://github.com/mattermost/mattermost-plugin-autotranslate",
     "support_url": "https://github.com/mattermost/mattermost-plugin-autotranslate/issues",
     "release_notes_url": "https://github.com/mattermost/mattermost-plugin-autotranslate/releases/tag/v0.4.0",
     "version": "0.4.0",
-    "min_server_version": "5.22.0",
+    "min_server_version": "12.0.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/plugin-linux-amd64",

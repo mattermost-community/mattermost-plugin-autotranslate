@@ -17,7 +17,7 @@ const config = {
             shippedProposals: true,
         }],
         ['@babel/preset-react', {
-            useBuiltIns: true,
+            runtime: 'automatic',
         }],
     ],
     plugins: [
@@ -32,6 +32,14 @@ config.env = {
     test: {
         presets: config.presets,
         plugins: config.plugins,
+    },
+    development: {
+        presets: [
+            ['@babel/preset-react', {
+                runtime: 'automatic',
+                development: true,
+            }],
+        ],
     },
 };
 config.env.test.presets[0][1].modules = 'auto';

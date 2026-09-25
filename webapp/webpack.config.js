@@ -1,5 +1,8 @@
 var path = require('path');
 
+// eslint-disable-next-line no-process-env
+const isDev = process.env.npm_lifecycle_event === 'debug';
+
 module.exports = {
     entry: [
         './src/index.js',
@@ -21,6 +24,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
+                        envName: isDev ? 'development' : 'production',
 
                         // Babel configuration is in babel.config.js because jest requires it to be there.
                     },
@@ -31,6 +35,9 @@ module.exports = {
     externals: {
         react: 'React',
         'react-dom': 'ReactDOM',
+        'react-dom/client': 'ReactDOM',
+        'react/jsx-runtime': 'ReactJSXRuntime',
+        'react/jsx-dev-runtime': 'ReactJSXDevRuntime',
         redux: 'Redux',
         'react-redux': 'ReactRedux',
         'prop-types': 'PropTypes',
